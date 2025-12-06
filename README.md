@@ -13,3 +13,9 @@ CREATE TABLE users (
   total_score INT(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+replace  with  $servername = "localhost";
+$username = "root"; 
+$password = ""; 
+$dbname = "gamehub";
+if you want to run on localhost
