@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍎 Fruit Catcher Game 🍌</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: #7cdee5;
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            background: #42797d;
+            display: block;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #ffcc00;
+            text-shadow: 2px 2px 4px rgba(255,255,0,0.3);
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .control-btn {
+            padding: 15px 30px;
+            font-size: 20px;
+            margin: 10px;
+            background: #ffffff;
+            color: #2a2a40;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+        .control-btn:hover {
+            background: #ffcc00;
+            transform: scale(1.1);
+        }
+        #game-over {
+            display: none;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffcc00;
+            text-shadow: 2px 2px 4px rgba(255,255,0,0.5);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🍎 Fruit Catcher Game 🍌</h1>
+    <canvas id="gameCanvas" width="400" height="500"></canvas>
+
+    <!-- Mobile Controls -->
+    <div class="controls">
+        <button class="control-btn" id="moveLeft">⬅ Left</button>
+        <button class="control-btn" id="moveRight">➡ Right</button>
+    </div>
+
+    <p id="game-over">Game Over! 😭</p>
+
+    <!-- Sounds -->
+    <audio id="catchSound" src="catch.mp3"></audio>
+    <audio id="bombSound" src="bomb.mp3"></audio>
+
+    <script>
+        let username = null;
+
+        // Fetch username from dashboard.php
+        fetch("dashboard.php")
+            .then(response => response.text())
+            .then(data => {
+                username = data.trim();
+                sessionStorage.setItem("username", username);
+                console.log("Username:", username);
+            })
+            .catch(error => {
+                console.error("Error fetching username:", error);
+                alert("Failed to fetch username. Please log in.");
+            });
+
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let basketX = 175, basketWidth = 60, basketHeight = 15;
+        let score = 0, lives = 3, fallingObjects = [], gameOver = false;
+
+        const fruits = ["🍎", "🍌", "🍒", "🍇", "🍉"];
+        const bombEmoji = "💣";
+
+        function drawBasket() {
+            ctx.fillStyle = "brown";
+            ctx.fillRect(basketX, canvas.height - 30, basketWidth, basketHeight);
+        }
+
+        function drawObjects() {
+            fallingObjects.forEach(obj => {
+                ctx.font = "24px Arial";
+                ctx.fillText(obj.type === "fruit" ? obj.emoji : bombEmoji, obj.x, obj.y);
+            });
+        }
+
+        function updateObjects() {
+            fallingObjects.forEach((obj, index) => {
+                obj.y += obj.speed;
+
+                if (obj.y > canvas.height - 30 && obj.x > basketX && obj.x < basketX + basketWidth) {
+                    if (obj.type === "fruit") {
+                        score += 1;
+                        document.getElementById("catchSound").play();
+                    } else {
+                        lives -= 1;
+                        document.getElementById("bombSound").play();
+                    }
+                    fallingObjects.splice(index, 1);
+                } else if (obj.y > canvas.height) {
+                    fallingObjects.splice(index, 1);
+                }
+            });
+        }
+
+        function spawnObject() {
+            let obj = {
+                x: Math.random() * (canvas.width - 20) + 10,
+                y: 0,
+                speed: Math.random() * 3 + 2,
+                type: Math.random() < 0.8 ? "fruit" : "bomb",
+                emoji: fruits[Math.floor(Math.random() * fruits.length)]
+            };
+            fallingObjects.push(obj);
+        }
+
+        function drawScore() {
+            ctx.fillStyle = "white";
+            ctx.font = "18px Arial";
+            ctx.fillText("Score: " + score, 10, 20);
+            ctx.fillText("Lives: " + lives, 10, 40);
+        }
+
+        function gameLoop() {
+            if (lives <= 0) {
+                gameOver = true;
+                document.getElementById("game-over").style.display = "block";
+
+                if (username) {
+                    updateTotalScore(username, score);
+                }
+
+                return;
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBasket();
+            drawObjects();
+            updateObjects();
+            drawScore();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        function moveBasket(direction) {
+            if (direction === "left" && basketX > 0) basketX -= 30;
+            if (direction === "right" && basketX < canvas.width - basketWidth) basketX += 30;
+        }
+
+        // Keyboard Controls
+        document.addEventListener("keydown", event => {
+            if (event.key === "ArrowLeft") moveBasket("left");
+            if (event.key === "ArrowRight") moveBasket("right");
+        });
+
+        // Mobile Touch Controls
+        document.getElementById("moveLeft").addEventListener("click", () => moveBasket("left"));
+        document.getElementById("moveRight").addEventListener("click", () => moveBasket("right"));
+
+        // Swipe Controls
+        let touchStartX = 0;
+        document.addEventListener("touchstart", (e) => touchStartX = e.touches[0].clientX);
+        document.addEventListener("touchmove", (e) => {
+            let touchEndX = e.touches[0].clientX;
+            if (touchEndX < touchStartX) moveBasket("left");
+            if (touchEndX > touchStartX) moveBasket("right");
+        });
+
+        function updateTotalScore(username, score) {
+            fetch("update_score.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "username=" + encodeURIComponent(username) + "&score=" + score
+            }).then(response => response.text())
+              .then(data => console.log("Score updated:", data))
+              .catch(error => console.error("Error updating score:", error));
+        }
+
+        setInterval(spawnObject, 1000);
+        gameLoop();
+    </script>
+</body>
+</html>

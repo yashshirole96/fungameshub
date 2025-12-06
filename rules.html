@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Rules - Fun Games Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Importing Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #7cdee5;
+            color: #302E28;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styling */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2); /* Transparent white */
+            backdrop-filter: blur(10px); /* Blur effect */
+            padding: 20px 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo h1 {
+            color: #089AAB;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #089AAB;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #e04d2e;
+        }
+
+        /* Rules Section Styling */
+        .rules-container {
+            width: 80%;
+            max-width: 800px;
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 100px auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .rules-container h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .rules-container ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .rules-container li {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+
+        /* Circles Background */
+        .rules-container::after {
+            content: '';
+            width: 180px;
+            height: 180px;
+            background: #fbe260;
+            border-radius: 50%;
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            z-index: -1;
+            animation: float 5s infinite ease-in-out;
+        }
+
+        .rules-container::before {
+            content: '';
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.2); /* Transparent white */
+            backdrop-filter: blur(10px); /* Blur effect */
+            border-radius: 50%;
+            position: absolute;
+            bottom: -40px;
+            right: -40px;
+            z-index: -1;
+            opacity: 0.6;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        /* Footer Styling */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2); /* Transparent white */
+            backdrop-filter: blur(10px); /* Blur effect */
+            margin-top: auto;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Background Elements */
+        .piggy {
+            position: absolute;
+            top: 120px; /* Lowered a bit */
+            left: 30px;
+            width: 100px;
+            opacity: 0.7;
+            animation: float 4s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            bottom: 30%; /* Placed between middle and bottom */
+            right: 50px;
+            width: 80px; /* Increased size */
+            opacity: 0.9;
+            animation: rotate 6s infinite linear;
+            z-index: -1;
+        }
+
+        /* Animations */
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <h1>Fun Games Hub</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="signup.php">User Login</a></li>
+                <li><a href="rules.html">Rules</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Rules Section -->
+    <section class="rules-container">
+        <h2>Game Rules</h2>
+        <ul>
+            <li>🎮 Each game has different objectives. Follow the instructions carefully.</li>
+            <li>⚡ Score as high as possible before time runs out!</li>
+            <li>🏆 Compete with friends and check the leaderboard.</li>
+            <li>🚀 Play fair, no hacks or cheats allowed!</li>
+        </ul>
+    </section>
+
+    <!-- Background Elements -->
+    <img src="images/piggy.png" alt="Piggy" class="piggy">
+    <img src="images/star.png" alt="Rotating Star" class="star">
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Fun Games Hub. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

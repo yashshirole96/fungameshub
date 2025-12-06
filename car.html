@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚗 Car Dodge Game 🏁</title>
+    <style>
+        body {
+            text-align: center;
+            background: #7cdee5;
+            font-family: Arial, sans-serif;
+            color: white;
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            background: black;
+            display: block;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚗 Car Dodge Game 🏁</h1>
+    <canvas id="gameCanvas" width="400" height="500"></canvas>
+    <p>Move with LEFT / RIGHT keys or tap on mobile</p>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+    
+        const playerCar = new Image();
+        playerCar.src = "player-car.png"; 
+    
+        const obstacleCar = new Image();
+        obstacleCar.src = "enemy-car.png"; 
+    
+        let car = { x: 175, width: 60, height: 80, speed: 20 };
+        let obstacles = [];
+        let score = 0;
+        let gameOver = false;
+        let username = "";
+    
+        function drawCar() {
+            ctx.drawImage(playerCar, car.x, canvas.height - 100, car.width, car.height);
+        }
+    
+        function drawObstacles() {
+            obstacles.forEach(obs => {
+                ctx.drawImage(obstacleCar, obs.x, obs.y, obs.width, obs.height);
+            });
+        }
+    
+        function updateObstacles() {
+            obstacles.forEach((obs, index) => {
+                obs.y += obs.speed;
+                if (obs.y > canvas.height) {
+                    obstacles.splice(index, 1);
+                    score++;
+                }
+    
+                if (obs.y + obs.height > canvas.height - 100 &&
+                    obs.x < car.x + car.width && obs.x + obs.width > car.x) {
+                    gameOver = true;
+                    saveScore(score);
+                    alert("Game Over! Your Score: " + score);
+                    document.location.reload();
+                }
+            });
+        }
+    
+        function spawnObstacle() {
+            let obs = {
+                x: Math.random() * (canvas.width - 50),
+                y: -80,
+                width: 50,
+                height: 80,
+                speed: Math.random() * 3 + 3
+            };
+            obstacles.push(obs);
+        }
+    
+        function drawScore() {
+            ctx.fillStyle = "white";
+            ctx.font = "18px Arial";
+            ctx.fillText("Score: " + score, 10, 20);
+        }
+    
+        function moveCar(direction) {
+            if (direction === "left" && car.x > 0) car.x -= car.speed;
+            if (direction === "right" && car.x < canvas.width - car.width) car.x += car.speed;
+        }
+    
+        function gameLoop() {
+            if (gameOver) return;
+    
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawCar();
+            drawObstacles();
+            updateObstacles();
+            drawScore();
+            requestAnimationFrame(gameLoop);
+        }
+    
+        document.addEventListener("keydown", event => {
+            if (event.key === "ArrowLeft") moveCar("left");
+            if (event.key === "ArrowRight") moveCar("right");
+        });
+    
+        document.addEventListener("touchstart", (e) => {
+            let touchX = e.touches[0].clientX;
+            if (touchX < window.innerWidth / 2) moveCar("left");
+            else moveCar("right");
+        });
+    
+        setInterval(spawnObstacle, 1200);
+        gameLoop();
+    
+        // Fetch username from dashboard.php
+        fetch('dashboard.php')
+            .then(response => response.text())
+            .then(data => {
+                username = data.trim();
+                console.log("Username:", username);
+            });
+    
+        // Function to send score to the database
+        function saveScore(score) {
+            if (!username || username === "") {
+                console.log("Error: Username is missing!");
+                return;
+            }
+    
+            const formData = new FormData();
+            formData.append("username", username);
+            formData.append("score", score);
+    
+            fetch("update_score.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => console.log("Score updated:", data))
+            .catch(error => console.error("Error updating score:", error));
+        }
+    </script>
+    
+</body>
+</html>

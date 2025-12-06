@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch the Falling Object</title>
+    <style>
+        /* CSS Code */
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #7cdee5;
+            font-family: Arial, sans-serif;
+        }
+
+        #game-container {
+            width: 400px;
+            height: 500px;
+            position: relative;
+            background-color: #42797d;
+            border: 2px solid #fff;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        #target {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            background-color: #ff4444;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+        }
+
+        #score-board {
+            color: white;
+            font-size: 24px;
+            margin: 20px 0;
+        }
+
+        #start-btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #start-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <!-- HTML Code -->
+    <div id="score-board">Score: 0</div>
+    <div id="game-container">
+        <div id="target"></div>
+    </div>
+    <button id="start-btn">Start Game</button>
+
+    <script>
+        // JavaScript Code
+        const target = document.getElementById('target');
+        const scoreBoard = document.getElementById('score-board');
+        const startBtn = document.getElementById('start-btn');
+        const gameContainer = document.getElementById('game-container');
+        let score = 0;
+        let gameActive = false;
+
+        function startGame() {
+            score = 0;
+            gameActive = true;
+            scoreBoard.textContent = "Score: " + score;
+            startBtn.style.display = 'none';
+            target.style.display = 'block';
+            moveTarget();
+        }
+
+        function moveTarget() {
+            if (!gameActive) return;
+
+            // Random horizontal position
+            const containerWidth = gameContainer.offsetWidth - target.offsetWidth;
+            const randomLeft = Math.floor(Math.random() * containerWidth);
+            
+            // Reset animation
+            target.style.transition = 'none';
+            target.style.left = randomLeft + 'px';
+            target.style.top = '-50px';
+
+            // Trigger reflow to reset animation
+            void target.offsetHeight;
+
+            // Start falling animation
+            target.style.transition = 'top 2s linear';
+            target.style.top = gameContainer.offsetHeight + 'px';
+
+            // Listen for animation end
+            target.addEventListener('transitionend', () => {
+                if (gameActive) {
+                    gameOver();
+                }
+            }, { once: true });
+        }
+
+        function incrementScore() {
+            if (gameActive) {
+                score++;
+                scoreBoard.textContent = "Score: " + score;
+                moveTarget();
+            }
+        }
+
+        function gameOver() {
+            gameActive = false;
+            target.style.display = 'none';
+            startBtn.style.display = 'block';
+            alert("Game Over! Final Score: " + score);
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', startGame);
+        target.addEventListener('click', incrementScore);
+
+
+
+
+
+        //------
+        
+        function gameOver() {
+    gameActive = false;
+    target.style.display = 'none';
+    startBtn.style.display = 'block';
+    alert("Game Over! Final Score: " + score);
+
+    // Send score to the server
+    fetch('update_score.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'score=' + score
+    })
+    .then(response => response.text())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
+}
+
+        //------
+
+
+    </script>
+</body>
+</html>

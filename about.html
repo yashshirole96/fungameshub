@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Fun Games Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Importing Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #7cdee5;
+            color: #302E28;
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styling */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2); /* Transparent white */
+            backdrop-filter: blur(10px); /* Blur effect */
+            padding: 20px 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .logo h1 {
+            color: #089AAB;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #089AAB;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #e04d2e;
+        }
+
+        /* About Section Styling */
+        .about-container {
+            width: 80%;
+            max-width: 800px;
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 100px auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .about-container h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .about-container p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        /* Circles Background */
+        .about-container::after {
+            content: '';
+            width: 180px;
+            height: 180px;
+            background: #fbe260;
+            border-radius: 50%;
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            z-index: -1;
+            animation: float 5s infinite ease-in-out;
+        }
+
+        .about-container::before {
+            content: '';
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.2); /* Transparent white */
+            backdrop-filter: blur(10px); /* Blur effect */
+            border-radius: 50%;
+            position: absolute;
+            bottom: -40px;
+            right: -40px;
+            z-index: -1;
+            opacity: 0.6;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        /* Footer Styling */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2); /* Transparent white */
+            backdrop-filter: blur(10px); /* Blur effect */
+            margin-top: auto;
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Background Elements */
+        .piggy {
+            position: absolute;
+            bottom: 50px; /* Moved to bottom left */
+            left: 30px;
+            width: 100px;
+            opacity: 0.7;
+            animation: float 4s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            top: 50px; /* Moved to top right */
+            right: 80px;
+            width: 80px;
+            opacity: 0.9;
+            animation: rotate 6s infinite linear;
+            z-index: -1;
+        }
+
+        .radio {
+            position: absolute;
+            right: 50px; /* Placed middle right */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100px;
+            opacity: 0.8;
+            animation: float 6s infinite ease-in-out;
+            z-index: -1;
+        }
+
+        /* Animations */
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <h1>Fun Games Hub</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="signup.php">User Login</a></li>
+                <li><a href="rules.html">Rules</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- About Section -->
+    <section class="about-container">
+        <h2>About Fun Games Hub</h2>
+        <p>Welcome to Fun Games Hub, your ultimate destination for exciting and entertaining online games.</p>
+        <p>Whether you're looking for thrilling challenges or casual fun, we've got a game for you!</p>
+        <p>Join our community and compete with players worldwide.</p>
+    </section>
+
+    <!-- Background Elements -->
+    <img src="images/piggy.png" alt="Piggy" class="piggy">
+    <img src="images/star.png" alt="Rotating Star" class="star">
+    <img src="images/radio.png" alt="Radio" class="radio">
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Fun Games Hub. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
