@@ -14,8 +14,20 @@ CREATE TABLE users (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-replace  with  $servername = "localhost";
+
+
+REPLACE
+
+$servername = "sql302.infinityfree.com";
+$username = "if0_38381261"; // XAMPP default
+$password = "h5On2c3OO5"; // No password for root in XAMPP
+$dbname = "if0_38381261_gamehub";
+ 
+WITH
+ 
+$servername = "localhost";
 $username = "root"; 
 $password = ""; 
 $dbname = "gamehub";
-if you want to run on localhost
+
+IF YOU WANT TO RUN ON LOCALHOST
